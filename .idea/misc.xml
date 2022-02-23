@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/drawable/fork_icon.xml" value="0.1" />
+        <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/drawable/item_background.xml" value="0.134" />
         <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/layout/single_repo_layout.xml" value="0.1" />
         <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/layout/songle_repo_layout.xml" value="0.18229166666666666" />
