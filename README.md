@@ -2,7 +2,7 @@
 
 **Github Trending Repo** is an Android application 📱 built using *Modern Android development*
 
-[![APK](https://img.shields.io/github/v/release/patilshreyas/notykt?color=7885FF&label=Simple%20App&logo=android&style=for-the-badge)](app/build/outputs/apk/debug/app-debug.apk)
+[![APK]](app/build/outputs/apk/debug/app-debug.apk)
 
 ## About
 
