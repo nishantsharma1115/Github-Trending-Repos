@@ -3,6 +3,7 @@ package com.nishant.githubtrendingrepos.repository
 import com.nishant.githubtrendingrepos.api.TrendingReposApi
 import com.nishant.githubtrendingrepos.room.TrendingRepoDAO
 import com.nishant.githubtrendingrepos.room.TrendingRepoEntity
+import com.nishant.githubtrendingrepos.utils.Resource
 import javax.inject.Inject
 
 class TrendingRepoRepository
@@ -10,11 +11,7 @@ class TrendingRepoRepository
     private val trendingRepoDAO: TrendingRepoDAO,
     private val trendingReposApi: TrendingReposApi
 ) {
-    suspend fun fetTrendingRepoFromAPI(
-        query: String,
-        onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
-    ) {
+    suspend fun fetTrendingRepoFromAPI(query: String): Resource<Boolean> {
         try {
             val response = trendingReposApi.getTrendingRepos("desc", query)
             response.items.forEach {
@@ -26,11 +23,11 @@ class TrendingRepoRepository
                     it.forks_count
                 )
                 trendingRepoDAO.insertTrendingRepo(repo)
-                onSuccess()
             }
         } catch (e: Exception) {
-            onFailure(e.message.toString())
+            return Resource.Error(e.message.toString())
         }
+        return Resource.Success(true)
     }
 
     fun getAllTrendingReposFromRoom() = trendingRepoDAO.getAllTrendingRepos()

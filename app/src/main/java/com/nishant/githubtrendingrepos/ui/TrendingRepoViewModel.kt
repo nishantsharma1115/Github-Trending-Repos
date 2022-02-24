@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class TrendingRepoViewModel @Inject constructor(
     private val repository: TrendingRepoRepository
 ) : ViewModel() {
     private var _fetchTrendingRepoFromAPIStatus = MutableLiveData<Resource<Boolean>>()
@@ -26,11 +26,17 @@ class MainViewModel @Inject constructor(
         query: String
     ) = viewModelScope.launch {
         _fetchTrendingRepoFromAPIStatus.postValue(Resource.Loading())
-        repository.fetTrendingRepoFromAPI(query, onSuccess = {
-            _fetchTrendingRepoFromAPIStatus.postValue(Resource.Success(true))
-        }, onFailure = {
-            _fetchTrendingRepoFromAPIStatus.postValue(Resource.Error(it))
-        })
+        when (val response = repository.fetTrendingRepoFromAPI(query)) {
+            is Resource.Loading -> {
+                _fetchTrendingRepoFromAPIStatus.postValue(Resource.Success(true))
+            }
+            is Resource.Success -> {
+                _fetchTrendingRepoFromAPIStatus.postValue(Resource.Success(true))
+            }
+            is Resource.Error -> {
+                _fetchTrendingRepoFromAPIStatus.postValue(Resource.Error(response.message.toString()))
+            }
+        }
     }
 
     val trendingRepos = repository.getAllTrendingReposFromRoom()

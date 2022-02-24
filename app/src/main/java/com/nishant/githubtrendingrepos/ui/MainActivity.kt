@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.collect
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: TrendingRepoViewModel by viewModels()
     private lateinit var adapter: TrendingRepoAdapter
     private var tracker: SelectionTracker<String>? = null
     private var repoList: List<TrendingRepoEntity>? = null
@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                 repoList = repos
                 adapter.submitList(repos)
                 binding.txtEmptyState.visibility = View.GONE
+                binding.edtSearch.visibility = View.VISIBLE
             }
         }
         setSelectionTracker(adapter)
@@ -145,6 +146,7 @@ class MainActivity : AppCompatActivity() {
                     showSnackBar(msg)
                 }
             }
+            .setBackgroundTint(resources.getColor(R.color.light_blue))
             .show()
     }
 }
