@@ -1,4 +1,4 @@
-package com.nishant.githubtrendingrepos.room
+package com.nishant.githubtrendingrepos.data.room
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TrendingRepoDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTrendingRepo(repo: TrendingRepoEntity): Long
+    suspend fun insertTrendingRepos(repos: List<TrendingRepoEntity>)
 
     @Query("select * from TrendingRepo")
     fun getAllTrendingRepos(): Flow<List<TrendingRepoEntity>>

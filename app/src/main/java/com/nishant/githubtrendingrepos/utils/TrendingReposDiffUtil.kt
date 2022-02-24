@@ -1,7 +1,7 @@
 package com.nishant.githubtrendingrepos.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.nishant.githubtrendingrepos.models.Item
+import com.nishant.githubtrendingrepos.data.models.Item
 
 class TrendingReposDiffUtil(
     private val oldList: List<Item>,

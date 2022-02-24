@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.nishant.githubtrendingrepos.R
 import com.nishant.githubtrendingrepos.adapters.TrendingRepoAdapter
+import com.nishant.githubtrendingrepos.data.room.TrendingRepoEntity
 import com.nishant.githubtrendingrepos.databinding.ActivityMainBinding
-import com.nishant.githubtrendingrepos.room.TrendingRepoEntity
 import com.nishant.githubtrendingrepos.utils.ConnectivityChecker
 import com.nishant.githubtrendingrepos.utils.DebouncingQueryTextListener
 import com.nishant.githubtrendingrepos.utils.Resource
@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class TrendingRepoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: TrendingRepoViewModel by viewModels()
@@ -63,10 +63,9 @@ class MainActivity : AppCompatActivity() {
             binding.edtSearch.visibility = View.VISIBLE
         } else if (!ConnectivityChecker.hasInternetConnection(this)) {
             if (repoList.isNullOrEmpty()) {
-                binding.txtEmptyState.visibility = View.VISIBLE
                 binding.edtSearch.visibility = View.GONE
             } else {
-                binding.txtEmptyState.visibility = View.GONE
+                binding.imgErrorState.visibility = View.GONE
                 binding.edtSearch.visibility = View.VISIBLE
             }
             showSnackBar("No Internet Connection")
@@ -78,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.trendingRepos.collect { repos ->
                 repoList = repos
                 adapter.submitList(repos)
-                binding.txtEmptyState.visibility = View.GONE
+                binding.imgErrorState.visibility = View.GONE
                 binding.edtSearch.visibility = View.VISIBLE
             }
         }
@@ -102,7 +101,7 @@ class MainActivity : AppCompatActivity() {
             when (it) {
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
-                    binding.txtEmptyState.visibility = View.GONE
+                    binding.imgErrorState.visibility = View.GONE
                     binding.rvTrendingRepos.visibility = View.GONE
                 }
                 is Resource.Success -> {
@@ -111,7 +110,9 @@ class MainActivity : AppCompatActivity() {
                     binding.edtSearch.visibility = View.VISIBLE
                 }
                 is Resource.Error -> {
-
+                    binding.rvTrendingRepos.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
+                    binding.imgErrorState.visibility = View.VISIBLE
                 }
             }
         }
@@ -146,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                     showSnackBar(msg)
                 }
             }
-            .setBackgroundTint(resources.getColor(R.color.light_blue))
+            .setBackgroundTint(resources.getColor(R.color.black))
             .show()
     }
 }

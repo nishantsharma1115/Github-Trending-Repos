@@ -1,4 +1,4 @@
-package com.nishant.githubtrendingrepos.room
+package com.nishant.githubtrendingrepos.data.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

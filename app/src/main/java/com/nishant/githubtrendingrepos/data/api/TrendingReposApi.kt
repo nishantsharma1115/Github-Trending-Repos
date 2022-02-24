@@ -1,6 +1,6 @@
-package com.nishant.githubtrendingrepos.api
+package com.nishant.githubtrendingrepos.data.api
 
-import com.nishant.githubtrendingrepos.models.TrendingReposResponse
+import com.nishant.githubtrendingrepos.data.models.TrendingReposResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

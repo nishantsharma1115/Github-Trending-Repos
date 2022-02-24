@@ -1,4 +1,4 @@
-package com.nishant.githubtrendingrepos.models
+package com.nishant.githubtrendingrepos.data.models
 
 data class Item(
     val allow_forking: Boolean,

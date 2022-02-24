@@ -1,4 +1,4 @@
-package com.nishant.githubtrendingrepos.models
+package com.nishant.githubtrendingrepos.data.models
 
 data class Owner(
     val avatar_url: String,

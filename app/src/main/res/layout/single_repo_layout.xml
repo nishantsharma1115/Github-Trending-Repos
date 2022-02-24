@@ -7,7 +7,7 @@
 
         <variable
             name="repo"
-            type="com.nishant.githubtrendingrepos.room.TrendingRepoEntity" />
+            type="com.nishant.githubtrendingrepos.data.room.TrendingRepoEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,9 +16,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="12dp"
-        android:paddingStart="12dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="12dp">
+        android:paddingTop="12dp">
 
         <TextView
             android:id="@+id/txtRepoFullName"

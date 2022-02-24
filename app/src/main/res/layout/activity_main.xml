@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.MainActivity">
+        tools:context=".ui.TrendingRepoActivity">
 
         <android.widget.Toolbar
             android:id="@+id/toolbar"
@@ -61,7 +61,7 @@
         </androidx.core.widget.NestedScrollView>
 
         <ImageView
-            android:id="@+id/txtEmptyState"
+            android:id="@+id/imgErrorState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/icon"

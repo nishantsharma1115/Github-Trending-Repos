@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nishant.githubtrendingrepos.repository.TrendingRepoRepository
-import com.nishant.githubtrendingrepos.room.TrendingRepoEntity
+import com.nishant.githubtrendingrepos.data.repository.TrendingRepoRepository
+import com.nishant.githubtrendingrepos.data.room.TrendingRepoEntity
 import com.nishant.githubtrendingrepos.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
