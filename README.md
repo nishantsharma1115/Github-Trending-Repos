@@ -2,7 +2,7 @@
 
 **Github Trending Repo** is an Android application 📱 built using *Modern Android development*
 
-[![APK]](app/build/outputs/apk/debug/app-debug.apk)
+[[Click Here to Download APK]](https://github.com/nishantsharma1115/Github-Trending-Repos/releases/tag/release/TrendingRepo.apk)
 
 ## About
 
