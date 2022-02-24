@@ -8,9 +8,10 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nishant.githubtrendingrepos.databinding.SingleRepoLayoutBinding
-import com.nishant.githubtrendingrepos.models.Item
+import com.nishant.githubtrendingrepos.room.TrendingRepoEntity
 
-class TrendingRepoAdapter : ListAdapter<Item, TrendingRepoAdapter.TrendingRepo>(DiffUtil()) {
+class TrendingRepoAdapter :
+    ListAdapter<TrendingRepoEntity, TrendingRepoAdapter.TrendingRepo>(DiffUtil()) {
 
     var tracker: SelectionTracker<String>? = null
 
@@ -18,25 +19,25 @@ class TrendingRepoAdapter : ListAdapter<Item, TrendingRepoAdapter.TrendingRepo>(
         setHasStableIds(true)
     }
 
-    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Item>() {
+    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<TrendingRepoEntity>() {
         override fun areItemsTheSame(
-            oldItem: Item,
-            newItem: Item
+            oldItem: TrendingRepoEntity,
+            newItem: TrendingRepoEntity
         ): Boolean {
-            return oldItem == newItem
+            return oldItem.fullName == newItem.fullName
         }
 
         override fun areContentsTheSame(
-            oldItem: Item,
-            newItem: Item
+            oldItem: TrendingRepoEntity,
+            newItem: TrendingRepoEntity
         ): Boolean {
-            return oldItem == newItem
+            return false
         }
     }
 
     inner class TrendingRepo(private val binding: SingleRepoLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Item, isActivated: Boolean = false) {
+        fun bind(item: TrendingRepoEntity, isActivated: Boolean = false) {
             binding.repo = item
             binding.root.isActivated = isActivated
         }
@@ -44,7 +45,7 @@ class TrendingRepoAdapter : ListAdapter<Item, TrendingRepoAdapter.TrendingRepo>(
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =
             object : ItemDetailsLookup.ItemDetails<String>() {
                 override fun getPosition(): Int = adapterPosition
-                override fun getSelectionKey(): String = getItem(adapterPosition).full_name
+                override fun getSelectionKey(): String = getItem(adapterPosition).fullName
                 override fun inSelectionHotspot(e: MotionEvent): Boolean = true
             }
     }
@@ -58,7 +59,7 @@ class TrendingRepoAdapter : ListAdapter<Item, TrendingRepoAdapter.TrendingRepo>(
     override fun onBindViewHolder(holder: TrendingRepo, position: Int) {
         val currentRepo = currentList[position]
         tracker?.let {
-            holder.bind(currentRepo, it.isSelected(currentRepo.full_name))
+            holder.bind(currentRepo, it.isSelected(currentRepo.fullName))
         }
     }
 
