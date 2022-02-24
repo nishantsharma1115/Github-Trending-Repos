@@ -1,13 +1,14 @@
 package com.nishant.githubtrendingrepos.repository
 
-import com.nishant.githubtrendingrepos.api.RetrofitInstance
+import com.nishant.githubtrendingrepos.api.TrendingReposApi
 import com.nishant.githubtrendingrepos.room.TrendingRepoDAO
 import com.nishant.githubtrendingrepos.room.TrendingRepoEntity
 import javax.inject.Inject
 
 class TrendingRepoRepository
 @Inject constructor(
-    private val trendingRepoDAO: TrendingRepoDAO
+    private val trendingRepoDAO: TrendingRepoDAO,
+    private val trendingReposApi: TrendingReposApi
 ) {
     suspend fun fetTrendingRepoFromAPI(
         query: String,
@@ -15,7 +16,7 @@ class TrendingRepoRepository
         onFailure: (String) -> Unit
     ) {
         try {
-            val response = RetrofitInstance.api.getTrendingRepos("desc", query)
+            val response = trendingReposApi.getTrendingRepos("desc", query)
             response.items.forEach {
                 val repo = TrendingRepoEntity(
                     it.full_name,
