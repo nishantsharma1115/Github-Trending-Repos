@@ -19,6 +19,9 @@
 - [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) - A coroutine is a
   concurrency design pattern that you can use on Android to simplify code that executes
   asynchronously.
+- [Dependency Injection](https://developer.android.com/training/dependency-injection) -
+    - [Hilt-Dagger](https://dagger.dev/hilt/) - Standard library to incorporate Dagger dependency injection into an Android application.
+    - [Hilt-ViewModel](https://developer.android.com/training/dependency-injection/hilt-jetpack) - DI for injecting `ViewModel`.
 - [Flow](https://kotlinlang.org/docs/reference/coroutines/flow.html) - A flow is an asynchronous
   version of a Sequence, a type of collection whose values are lazily produced.
 - [Android Architecture Components](https://developer.android.com/topic/libraries/architecture) -
