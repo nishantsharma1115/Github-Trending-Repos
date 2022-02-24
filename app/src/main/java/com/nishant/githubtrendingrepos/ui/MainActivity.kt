@@ -11,6 +11,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.nishant.githubtrendingrepos.R
 import com.nishant.githubtrendingrepos.adapters.TrendingRepoAdapter
 import com.nishant.githubtrendingrepos.databinding.ActivityMainBinding
 import com.nishant.githubtrendingrepos.room.TrendingRepoEntity
@@ -50,17 +51,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_GithubTrendingRepos)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        setActionBar(binding.toolbar)
+        binding.toolbar.title = ""
 
         if (ConnectivityChecker.hasInternetConnection(this) && savedInstanceState == null) {
             viewModel.fetchTrendingRepoFromAPI("java")
+            binding.edtSearch.visibility = View.VISIBLE
         } else if (!ConnectivityChecker.hasInternetConnection(this)) {
             if (repoList.isNullOrEmpty()) {
                 binding.txtEmptyState.visibility = View.VISIBLE
+                binding.edtSearch.visibility = View.GONE
             } else {
                 binding.txtEmptyState.visibility = View.GONE
+                binding.edtSearch.visibility = View.VISIBLE
             }
             showSnackBar("No Internet Connection")
         }
@@ -71,6 +78,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.trendingRepos.collect { repos ->
                 repoList = repos
                 adapter.submitList(repos)
+                binding.txtEmptyState.visibility = View.GONE
             }
         }
         setSelectionTracker(adapter)
@@ -99,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.rvTrendingRepos.visibility = View.VISIBLE
+                    binding.edtSearch.visibility = View.VISIBLE
                 }
                 is Resource.Error -> {
 

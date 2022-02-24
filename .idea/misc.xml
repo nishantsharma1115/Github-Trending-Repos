@@ -5,8 +5,10 @@
       <map>
         <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/drawable/fork_icon.xml" value="0.1" />
         <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/drawable/item_background.xml" value="0.134" />
+        <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/drawable/search_view_bg.xml" value="0.1335" />
+        <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/font/dm_sans.xml" value="0.2125" />
         <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/layout/activity_main.xml" value="0.2" />
-        <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/layout/single_repo_layout.xml" value="0.1" />
+        <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/layout/single_repo_layout.xml" value="0.25" />
         <entry key="..\:/Android/Project/GithubTrendingRepos/app/src/main/res/layout/songle_repo_layout.xml" value="0.18229166666666666" />
       </map>
     </option>

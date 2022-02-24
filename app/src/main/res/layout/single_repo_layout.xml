@@ -10,95 +10,105 @@
             type="com.nishant.githubtrendingrepos.room.TrendingRepoEntity" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:paddingStart="12dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="12dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/item_background"
-            android:padding="12dp">
+        <TextView
+            android:id="@+id/txtRepoFullName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/dm_sans_medium"
+            android:maxLines="1"
+            android:text="@{repo.fullName}"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@id/checkBox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtRepoDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/dm_sans_regular"
+            android:maxLines="3"
+            android:text="@{repo.description}"
+            app:layout_constraintEnd_toStartOf="@id/checkBox"
+            app:layout_constraintStart_toStartOf="@id/txtRepoFullName"
+            app:layout_constraintTop_toBottomOf="@id/txtRepoFullName" />
+
+        <LinearLayout
+            android:id="@+id/llBottomDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@id/checkBox"
+            app:layout_constraintStart_toStartOf="@id/txtRepoDesc"
+            app:layout_constraintTop_toBottomOf="@id/txtRepoDesc">
 
             <ImageView
-                android:id="@+id/imgRepoIcon"
+                android:id="@+id/imgStarIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/icon"
-                android:src="@drawable/repo_icon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:src="@drawable/star_icon" />
 
             <TextView
-                android:id="@+id/txtRepoFullName"
-                android:layout_width="0dp"
+                android:id="@+id/txtNoOfStars"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@{repo.fullName}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/imgRepoIcon"
-                app:layout_constraintTop_toTopOf="@id/imgRepoIcon" />
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/dm_sans_regular"
+                android:text="@{String.valueOf(repo.startCount)}" />
+
+            <ImageView
+                android:id="@+id/imgForkIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:contentDescription="@string/icon"
+                android:src="@drawable/fork_icon" />
 
             <TextView
-                android:id="@+id/txtRepoDesc"
-                android:layout_width="0dp"
+                android:id="@+id/txtNoOfForks"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:text="@{repo.description}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/imgRepoIcon"
-                app:layout_constraintTop_toBottomOf="@id/imgRepoIcon" />
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/dm_sans_regular"
+                android:text="@{String.valueOf(repo.forkCount)}" />
+        </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/llBottomDetails"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/txtRepoDesc"
-                app:layout_constraintTop_toBottomOf="@id/txtRepoDesc">
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/bottomLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/imgStarIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/icon"
-                    android:src="@drawable/start_icon" />
+        <View
+            android:id="@+id/bottomLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="22dp"
+            android:background="#EDEDED"
+            app:layout_constraintTop_toBottomOf="@id/llBottomDetails" />
 
-                <TextView
-                    android:id="@+id/txtNoOfStars"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@{String.valueOf(repo.startCount)}" />
-
-                <ImageView
-                    android:id="@+id/imgForkIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:contentDescription="@string/icon"
-                    android:src="@drawable/fork_icon" />
-
-                <TextView
-                    android:id="@+id/txtNoOfForks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@{String.valueOf(repo.forkCount)}" />
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -40,6 +40,7 @@ class TrendingRepoAdapter :
         fun bind(item: TrendingRepoEntity, isActivated: Boolean = false) {
             binding.repo = item
             binding.root.isActivated = isActivated
+            binding.checkBox.isChecked = isActivated
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =

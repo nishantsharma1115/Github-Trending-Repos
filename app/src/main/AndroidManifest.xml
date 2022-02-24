@@ -15,7 +15,9 @@
         android:theme="@style/Theme.GithubTrendingRepos">
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:label="Trending Repositories"
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
