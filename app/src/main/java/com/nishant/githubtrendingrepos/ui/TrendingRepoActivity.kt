@@ -5,14 +5,15 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.nishant.githubtrendingrepos.R
-import com.nishant.githubtrendingrepos.data.local.TrendingRepoEntity
 import com.nishant.githubtrendingrepos.databinding.ActivityMainBinding
 import com.nishant.githubtrendingrepos.utils.ConnectivityChecker
 import com.nishant.githubtrendingrepos.utils.DebouncingQueryTextListener
@@ -29,7 +30,6 @@ class TrendingRepoActivity : AppCompatActivity() {
     private val viewModel: TrendingRepoViewModel by viewModels()
     private lateinit var adapter: TrendingRepoAdapter
     private var tracker: SelectionTracker<String>? = null
-    private var repoList: List<TrendingRepoEntity>? = null
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -62,11 +62,12 @@ class TrendingRepoActivity : AppCompatActivity() {
         observeTrendingRepoLivedata()
 
         lifecycleScope.launchWhenStarted {
-            viewModel.trendingRepos.collect { repos ->
-                repoList = repos
-                adapter.submitList(repos)
-                binding.imgErrorState.visibility = View.GONE
-                binding.edtSearch.visibility = View.VISIBLE
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.trendingRepos.collect { repos ->
+                    adapter.submitList(repos)
+                    binding.imgErrorState.visibility = View.GONE
+                    binding.edtSearch.visibility = View.VISIBLE
+                }
             }
         }
         setSelectionTracker(adapter)
@@ -110,15 +111,7 @@ class TrendingRepoActivity : AppCompatActivity() {
     private fun observeSearchViewListener() {
         binding.edtSearch.setOnQueryTextListener(
             DebouncingQueryTextListener(lifecycle) { it ->
-                if (it.isNullOrEmpty()) {
-                    adapter.submitList(repoList)
-                } else {
-                    lifecycleScope.launchWhenStarted {
-                        viewModel.getSearchedRepos(it.toString()).collect { searchRepos ->
-                            adapter.submitList(searchRepos)
-                        }
-                    }
-                }
+                viewModel.updateQuery(it.toString())
             }
         )
     }
@@ -133,9 +126,8 @@ class TrendingRepoActivity : AppCompatActivity() {
     private fun populateData(savedInstanceState: Bundle?) {
         if (ConnectivityChecker.hasInternetConnection(this) && savedInstanceState == null) {
             viewModel.fetchTrendingRepoFromAPI("java")
-            binding.edtSearch.visibility = View.VISIBLE
         } else if (!ConnectivityChecker.hasInternetConnection(this)) {
-            if (repoList.isNullOrEmpty()) {
+            if (viewModel.trendingRepos.value.isNullOrEmpty()) {
                 binding.edtSearch.visibility = View.GONE
             } else {
                 binding.imgErrorState.visibility = View.GONE

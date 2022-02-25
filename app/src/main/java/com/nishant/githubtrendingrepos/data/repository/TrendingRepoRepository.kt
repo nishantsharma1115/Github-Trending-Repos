@@ -27,9 +27,9 @@ class TrendingRepoRepository
         Resource.Error(e.code().toString())
     }
 
-    fun getAllTrendingReposFromRoom() = trendingRepoDAO.getAllTrendingRepos()
+    fun getAllTrendingRepos() = trendingRepoDAO.getAllTrendingRepos()
         .flowOn(Dispatchers.IO)
 
-    fun getSearchedReposFromRoom(query: String) =
+    fun getSearchedRepos(query: String) =
         trendingRepoDAO.getSearchedRepos(query).flowOn(Dispatchers.IO)
 }
