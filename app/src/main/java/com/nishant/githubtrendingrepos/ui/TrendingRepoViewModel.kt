@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nishant.githubtrendingrepos.data.local.TrendingRepoEntity
 import com.nishant.githubtrendingrepos.data.repository.TrendingRepoRepository
-import com.nishant.githubtrendingrepos.data.room.TrendingRepoEntity
 import com.nishant.githubtrendingrepos.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -18,29 +18,26 @@ import javax.inject.Inject
 class TrendingRepoViewModel @Inject constructor(
     private val repository: TrendingRepoRepository
 ) : ViewModel() {
-    private var _fetchTrendingRepoFromAPIStatus = MutableLiveData<Resource<Boolean>>()
-    val fetchTrendingRepoFromAPIStatus: LiveData<Resource<Boolean>> =
+    private var _fetchTrendingRepoFromAPIStatus = MutableLiveData<Resource<Unit>>()
+    val fetchTrendingRepoFromAPIStatus: LiveData<Resource<Unit>> =
         _fetchTrendingRepoFromAPIStatus
 
     fun fetchTrendingRepoFromAPI(
         query: String
     ) = viewModelScope.launch {
         _fetchTrendingRepoFromAPIStatus.postValue(Resource.Loading())
-        when (val response = repository.fetTrendingRepoFromAPI(query)) {
+        when (val response = repository.fetchTrendingRepoFromAPI(query)) {
             is Resource.Loading -> {
-                _fetchTrendingRepoFromAPIStatus.postValue(Resource.Success(true))
+                _fetchTrendingRepoFromAPIStatus.postValue(Resource.Loading())
             }
-            is Resource.Success -> {
-                _fetchTrendingRepoFromAPIStatus.postValue(Resource.Success(true))
-            }
-            is Resource.Error -> {
-                _fetchTrendingRepoFromAPIStatus.postValue(Resource.Error(response.message.toString()))
+            else -> {
+                _fetchTrendingRepoFromAPIStatus.postValue(response)
             }
         }
     }
 
     val trendingRepos = repository.getAllTrendingReposFromRoom()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     fun getSearchedRepos(query: String): Flow<List<TrendingRepoEntity>> {
         return repository.getSearchedReposFromRoom(query)

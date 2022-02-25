@@ -1,4 +1,4 @@
-package com.nishant.githubtrendingrepos.adapters
+package com.nishant.githubtrendingrepos.ui
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -8,7 +8,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nishant.githubtrendingrepos.databinding.SingleRepoLayoutBinding
-import com.nishant.githubtrendingrepos.data.room.TrendingRepoEntity
+import com.nishant.githubtrendingrepos.data.local.TrendingRepoEntity
 
 class TrendingRepoAdapter :
     ListAdapter<TrendingRepoEntity, TrendingRepoAdapter.TrendingRepo>(DiffUtil()) {

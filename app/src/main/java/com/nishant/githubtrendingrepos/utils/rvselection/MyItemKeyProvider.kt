@@ -1,7 +1,7 @@
 package com.nishant.githubtrendingrepos.utils.rvselection
 
 import androidx.recyclerview.selection.ItemKeyProvider
-import com.nishant.githubtrendingrepos.adapters.TrendingRepoAdapter
+import com.nishant.githubtrendingrepos.ui.TrendingRepoAdapter
 
 class MyItemKeyProvider(private val adapter: TrendingRepoAdapter) :
     ItemKeyProvider<String>(SCOPE_CACHED) {

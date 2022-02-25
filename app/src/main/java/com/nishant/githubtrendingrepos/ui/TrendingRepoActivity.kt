@@ -12,8 +12,7 @@ import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.nishant.githubtrendingrepos.R
-import com.nishant.githubtrendingrepos.adapters.TrendingRepoAdapter
-import com.nishant.githubtrendingrepos.data.room.TrendingRepoEntity
+import com.nishant.githubtrendingrepos.data.local.TrendingRepoEntity
 import com.nishant.githubtrendingrepos.databinding.ActivityMainBinding
 import com.nishant.githubtrendingrepos.utils.ConnectivityChecker
 import com.nishant.githubtrendingrepos.utils.DebouncingQueryTextListener
@@ -56,22 +55,11 @@ class TrendingRepoActivity : AppCompatActivity() {
         setContentView(binding.root)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         setActionBar(binding.toolbar)
-        binding.toolbar.title = ""
 
-        if (ConnectivityChecker.hasInternetConnection(this) && savedInstanceState == null) {
-            viewModel.fetchTrendingRepoFromAPI("java")
-            binding.edtSearch.visibility = View.VISIBLE
-        } else if (!ConnectivityChecker.hasInternetConnection(this)) {
-            if (repoList.isNullOrEmpty()) {
-                binding.edtSearch.visibility = View.GONE
-            } else {
-                binding.imgErrorState.visibility = View.GONE
-                binding.edtSearch.visibility = View.VISIBLE
-            }
-            showSnackBar("No Internet Connection")
-        }
-
-        setUpRV()
+        populateData(savedInstanceState)
+        setUpRecyclerView()
+        observeSearchViewListener()
+        observeTrendingRepoLivedata()
 
         lifecycleScope.launchWhenStarted {
             viewModel.trendingRepos.collect { repos ->
@@ -82,21 +70,22 @@ class TrendingRepoActivity : AppCompatActivity() {
             }
         }
         setSelectionTracker(adapter)
+    }
 
-        binding.edtSearch.setOnQueryTextListener(
-            DebouncingQueryTextListener(lifecycle) { it ->
-                if (it.isNullOrEmpty()) {
-                    adapter.submitList(repoList)
-                } else {
-                    lifecycleScope.launchWhenStarted {
-                        viewModel.getSearchedRepos(it.toString()).collect { searchRepos ->
-                            adapter.submitList(searchRepos)
-                        }
-                    }
-                }
-            }
-        )
+    private fun setSelectionTracker(adapter: TrendingRepoAdapter) {
+        tracker = SelectionTracker.Builder<String>(
+            "mySelection",
+            binding.rvTrendingRepos,
+            MyItemKeyProvider(adapter),
+            MyItemDetailsLookup(binding.rvTrendingRepos),
+            StorageStrategy.createStringStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectAnything()
+        ).build()
+        adapter.tracker = tracker
+    }
 
+    private fun observeTrendingRepoLivedata() {
         viewModel.fetchTrendingRepoFromAPIStatus.observe(this) {
             when (it) {
                 is Resource.Loading -> {
@@ -118,24 +107,42 @@ class TrendingRepoActivity : AppCompatActivity() {
         }
     }
 
-    private fun setSelectionTracker(adapter: TrendingRepoAdapter) {
-        tracker = SelectionTracker.Builder<String>(
-            "mySelection",
-            binding.rvTrendingRepos,
-            MyItemKeyProvider(adapter),
-            MyItemDetailsLookup(binding.rvTrendingRepos),
-            StorageStrategy.createStringStorage()
-        ).withSelectionPredicate(
-            SelectionPredicates.createSelectAnything()
-        ).build()
-        adapter.tracker = tracker
+    private fun observeSearchViewListener() {
+        binding.edtSearch.setOnQueryTextListener(
+            DebouncingQueryTextListener(lifecycle) { it ->
+                if (it.isNullOrEmpty()) {
+                    adapter.submitList(repoList)
+                } else {
+                    lifecycleScope.launchWhenStarted {
+                        viewModel.getSearchedRepos(it.toString()).collect { searchRepos ->
+                            adapter.submitList(searchRepos)
+                        }
+                    }
+                }
+            }
+        )
     }
 
-    private fun setUpRV() {
+    private fun setUpRecyclerView() {
         adapter = TrendingRepoAdapter()
         binding.rvTrendingRepos.adapter = adapter
         binding.rvTrendingRepos.layoutManager = LinearLayoutManager(applicationContext)
         binding.rvTrendingRepos.setHasFixedSize(false)
+    }
+
+    private fun populateData(savedInstanceState: Bundle?) {
+        if (ConnectivityChecker.hasInternetConnection(this) && savedInstanceState == null) {
+            viewModel.fetchTrendingRepoFromAPI("java")
+            binding.edtSearch.visibility = View.VISIBLE
+        } else if (!ConnectivityChecker.hasInternetConnection(this)) {
+            if (repoList.isNullOrEmpty()) {
+                binding.edtSearch.visibility = View.GONE
+            } else {
+                binding.imgErrorState.visibility = View.GONE
+                binding.edtSearch.visibility = View.VISIBLE
+            }
+            showSnackBar("No Internet Connection")
+        }
     }
 
     private fun showSnackBar(msg: String) {

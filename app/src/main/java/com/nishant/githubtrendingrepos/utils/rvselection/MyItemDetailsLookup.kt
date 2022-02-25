@@ -3,7 +3,7 @@ package com.nishant.githubtrendingrepos.utils.rvselection
 import android.view.MotionEvent
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.widget.RecyclerView
-import com.nishant.githubtrendingrepos.adapters.TrendingRepoAdapter
+import com.nishant.githubtrendingrepos.ui.TrendingRepoAdapter
 
 class MyItemDetailsLookup(private val recyclerView: RecyclerView) :
     ItemDetailsLookup<String>() {

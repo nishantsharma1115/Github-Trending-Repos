@@ -1,7 +1,7 @@
 package com.nishant.githubtrendingrepos.di
 
 import android.content.Context
-import com.nishant.githubtrendingrepos.data.api.TrendingReposApi
+import com.nishant.githubtrendingrepos.data.network.TrendingReposApi
 import com.nishant.githubtrendingrepos.utils.Constants
 import dagger.Module
 import dagger.Provides

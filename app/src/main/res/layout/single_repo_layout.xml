@@ -7,7 +7,7 @@
 
         <variable
             name="repo"
-            type="com.nishant.githubtrendingrepos.data.room.TrendingRepoEntity" />
+            type="com.nishant.githubtrendingrepos.data.local.TrendingRepoEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

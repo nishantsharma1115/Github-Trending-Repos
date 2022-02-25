@@ -2,9 +2,9 @@ package com.nishant.githubtrendingrepos.di
 
 import android.content.Context
 import androidx.room.Room
-import com.nishant.githubtrendingrepos.data.room.CacheMapper
-import com.nishant.githubtrendingrepos.data.room.TrendingRepoDAO
-import com.nishant.githubtrendingrepos.data.room.TrendingRepoDatabase
+import com.nishant.githubtrendingrepos.data.local.CacheMapper
+import com.nishant.githubtrendingrepos.data.local.TrendingRepoDAO
+import com.nishant.githubtrendingrepos.data.local.TrendingRepoDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
