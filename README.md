@@ -46,7 +46,6 @@
 
  ```
 com.nishant.githubtrendingrepos
-├── adapters                   # Recycler View Adapters
 ├── data                       # For data handling
 │   ├── api                    # Interfaces to call RESTful APIs
 │   ├── models                 # Model class to convert REST API response to data class
@@ -55,7 +54,7 @@ com.nishant.githubtrendingrepos
 │       ├── Dao                # Data Access Object for Room
 │       └── Database           # Database Instance
 ├── di                         # Hilt DI Modules
-├── ui                         # Activity(View) or realted ViewModel
+├── ui                         # Activity(View) or realted ViewModel or Adapters
 ├── utils                      # Extension functions 
 └── MyApplication              # Application Class
 
