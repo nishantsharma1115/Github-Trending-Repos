@@ -7,7 +7,7 @@
 
         <variable
             name="repo"
-            type="com.nishant.githubtrendingrepos.data.local.TrendingRepoEntity" />
+            type="com.nishant.githubtrendingrepos.ui.viewmodel.TrendingRepository" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,7 +27,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/dm_sans_medium"
             android:maxLines="1"
-            android:text="@{repo.fullName}"
+            android:text="@{repo.name}"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@id/checkBox"
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:fontFamily="@font/dm_sans_regular"
-                android:text="@{String.valueOf(repo.startCount)}" />
+                android:text="@{String.valueOf(repo.starCount)}" />
 
             <ImageView
                 android:id="@+id/imgForkIcon"

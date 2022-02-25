@@ -1,25 +1,23 @@
 package com.nishant.githubtrendingrepos.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.selection.SelectionPredicates
-import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.nishant.githubtrendingrepos.R
 import com.nishant.githubtrendingrepos.databinding.ActivityMainBinding
+import com.nishant.githubtrendingrepos.ui.viewmodel.TrendingRepoViewModel
 import com.nishant.githubtrendingrepos.utils.ConnectivityChecker
 import com.nishant.githubtrendingrepos.utils.DebouncingQueryTextListener
 import com.nishant.githubtrendingrepos.utils.Resource
-import com.nishant.githubtrendingrepos.utils.rvselection.MyItemDetailsLookup
-import com.nishant.githubtrendingrepos.utils.rvselection.MyItemKeyProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -29,31 +27,36 @@ class TrendingRepoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: TrendingRepoViewModel by viewModels()
     private lateinit var adapter: TrendingRepoAdapter
-    private var tracker: SelectionTracker<String>? = null
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val selectedItems = ArrayList<String>()
-        tracker?.selection?.forEach { selectedItems.add(it) }
-        outState.putStringArrayList("tracker", selectedItems)
+
+        //Retaining the query and selection after process death
+        outState.putString("searchedQuery", viewModel.searchedQuery)
+        outState.putStringArrayList("selectedRepoList", viewModel.selectedRepoList)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        val selectedItems = savedInstanceState.getStringArrayList("tracker")
-        if (selectedItems != null && selectedItems.size > 0) {
-            selectedItems.forEach {
-                tracker?.select(it)
-            }
+
+        //Update the selection and query to viewModel after process death
+        val searchedQuery = savedInstanceState.getString("searchedQuery")
+        val selectedRepoList = savedInstanceState.getStringArrayList("selectedRepoList")
+        viewModel.updateQuery(searchedQuery)
+        selectedRepoList?.forEach { repoName ->
+            viewModel.updateSelection(repoName, true)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.root.requestFocus()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_GithubTrendingRepos)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setActionBar(binding.toolbar)
 
         populateData(savedInstanceState)
@@ -70,20 +73,6 @@ class TrendingRepoActivity : AppCompatActivity() {
                 }
             }
         }
-        setSelectionTracker(adapter)
-    }
-
-    private fun setSelectionTracker(adapter: TrendingRepoAdapter) {
-        tracker = SelectionTracker.Builder<String>(
-            "mySelection",
-            binding.rvTrendingRepos,
-            MyItemKeyProvider(adapter),
-            MyItemDetailsLookup(binding.rvTrendingRepos),
-            StorageStrategy.createStringStorage()
-        ).withSelectionPredicate(
-            SelectionPredicates.createSelectAnything()
-        ).build()
-        adapter.tracker = tracker
     }
 
     private fun observeTrendingRepoLivedata() {
@@ -117,9 +106,13 @@ class TrendingRepoActivity : AppCompatActivity() {
     }
 
     private fun setUpRecyclerView() {
-        adapter = TrendingRepoAdapter()
+        adapter = TrendingRepoAdapter { repoName, isSelected ->
+            viewModel.updateSelection(repoName, isSelected)
+        }
         binding.rvTrendingRepos.adapter = adapter
-        binding.rvTrendingRepos.layoutManager = LinearLayoutManager(applicationContext)
+        binding.rvTrendingRepos.layoutManager = object : LinearLayoutManager(applicationContext) {
+            override fun supportsPredictiveItemAnimations(): Boolean = false
+        }
         binding.rvTrendingRepos.setHasFixedSize(false)
     }
 
